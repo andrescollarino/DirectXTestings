@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "System.h"
+//#include "System.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -17,6 +17,8 @@ Game::~Game()
 		ChangeDisplaySettings(NULL, 0);
 	}
 
+	Engine::GetEngine()->Release();
+
 	UnregisterClass(WINDOW_CLASS_NAME, m_hInstance);
 	m_hInstance = NULL;
 }
@@ -26,9 +28,15 @@ bool Game::Initialize()
 {
 	if (!CreateDXWindow("Game Test", WINDOW_POS_X, WINDOW_POS_Y, SCREEN_WIDHT, SCREEN_HEIGHT))
 	{
+		// TODO: Informar del problema
 		return false;
 	}
 
+	if (!Engine::GetEngine()->Initialize(m_hInstance, Engine::GetEngine()->GetGraphics()->GetHwnd()))
+	{
+		// TODO: Informar del problema
+		return false;
+	}
 	return true;
 }
 
@@ -50,6 +58,7 @@ void Game::Run()
 		else
 		{
 			// Updates y Render
+			Engine::GetEngine()->Run();
 		}
 	}
 }
@@ -129,10 +138,25 @@ bool Game::CreateDXWindow(string windowTitle, int x, int y, int width, int heigh
 	if (hwnd == NULL)
 	{
 		MessageBox(NULL, "CreateWindowEx Failed", "Error", MB_OK);
+		Engine::GetEngine()->Release();
 		PostQuitMessage(0);
 
 		return false;
 	}
+
+	if (!Engine::GetEngine()->InitializeGraphics(hwnd))
+	{
+		MessageBox(hwnd, "Could not initialize DirectX 11", "Error", MB_OK);
+		Engine::GetEngine()->Release();
+		PostQuitMessage(0);
+		UnregisterClass(WINDOW_CLASS_NAME, m_hInstance);
+		m_hInstance = NULL;
+		DestroyWindow(hwnd);
+
+		return false;
+	}
+
+	Engine::GetEngine()->GetGraphics()->SetHwnd(hwnd);
 
 	ShowWindow(hwnd, SW_SHOW);
 	SetForegroundWindow(hwnd);
@@ -149,6 +173,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_KEYDOWN:
+		if (wParam == VK_ESCAPE)
+		{
+			PostQuitMessage(0);
+			DestroyWindow(hwnd);
+		}
+		break;
 	case WM_PAINT:
 
 		hdc = BeginPaint(hwnd, &ps);
