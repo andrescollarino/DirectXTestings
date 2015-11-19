@@ -87,6 +87,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DManager.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TextureShader.h" />
+    <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
