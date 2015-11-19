@@ -2,7 +2,9 @@
 #define _ENGINE_H
 
 #include "Graphics.h"
-
+#include "TextureShader.h"
+#include "Texture.h"
+#include "VertexBuffer.h"
 
 class Engine
 {
@@ -34,6 +36,11 @@ private:
 
 	static Engine* mp_instance;
 	Graphics * mp_graphics;
+
+	// TODO:TEMP SOLO APRA PRUEBAS
+	VertexBuffer * vertexBuffer;
+	TextureShader * textureShader;
+	Texture * texture;
 };
 
 #endif

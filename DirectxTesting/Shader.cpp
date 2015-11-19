@@ -189,7 +189,7 @@ bool Shader::initializeShader(ID3D11Device * device, HWND hwnd, LPCSTR vsFileNam
 		NULL,
 		NULL,
 		pixelFuncName,
-		"vs_5_0",
+		"ps_5_0",
 		D3D10_SHADER_ENABLE_STRICTNESS,
 		0,
 		NULL,
@@ -271,8 +271,9 @@ bool Shader::initializeShader(ID3D11Device * device, HWND hwnd, LPCSTR vsFileNam
 	pixelShaderBuffer = nullptr;
 
 	// Configuro la matrix Buffer Description
+	ZeroMemory(&maxtrixBufferDesc, sizeof(D3D11_BUFFER_DESC));
 	maxtrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	maxtrixBufferDesc.ByteWidth = sizeof(D3D11_BUFFER_DESC);
+	maxtrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
 	maxtrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	maxtrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	maxtrixBufferDesc.MiscFlags = 0;
